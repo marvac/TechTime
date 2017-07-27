@@ -1,0 +1,6 @@
+﻿{
+  "ConnectionStrings": {
+
+	"RecordContextConnection": "Server=999.999.999.999;Database=TechTimeDb;User ID=userId;Password=password;"
+  }
+}
