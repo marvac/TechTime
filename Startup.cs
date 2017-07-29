@@ -11,6 +11,7 @@ using TechTime.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using TechTime.Service;
 
 namespace TechTime
 {
@@ -36,6 +37,7 @@ namespace TechTime
             services.AddSingleton(_config);
             services.AddScoped<IRecordRepository, RecordRepository>();
             services.AddDbContext<RecordContext>(ServiceLifetime.Scoped);
+            services.AddTransient<DatabaseSeeder>();
 
             services.AddIdentity<UserLogin, IdentityRole>(config =>
             {
@@ -45,7 +47,7 @@ namespace TechTime
                 config.Password.RequireUppercase = false;
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireLowercase = false;
-                config.Cookies.ApplicationCookie.LoginPath = "/Home/Login";
+                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
             }).AddEntityFrameworkStores<RecordContext>();
 
             services.AddRouting(options =>
@@ -65,7 +67,7 @@ namespace TechTime
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DatabaseSeeder databaseSeeder)
         {
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -82,7 +84,6 @@ namespace TechTime
                 app.UseExceptionHandler("/Home/Error");
             }
 
-
             app.UseMvc(config =>
             {
                 config.MapRoute(
@@ -90,6 +91,8 @@ namespace TechTime
                     template: "{controller}/{action}/{id?}",
                     defaults: new { controller = "Home", action = "Index" });
             });
+
+            databaseSeeder.Seed().Wait();
         }
     }
 }

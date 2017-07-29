@@ -11,6 +11,10 @@
   <ItemGroup>
     <Content Remove="config.json" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\img\sitelogo.png" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="1.0.3" />
@@ -40,6 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet">
+      <Version>1.0.0-*</Version>
+    </DotNetCliToolReference>
   </ItemGroup>
 
 </Project>

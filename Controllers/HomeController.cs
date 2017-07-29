@@ -18,18 +18,13 @@ namespace TechTime.Controllers
             _repo = repo;
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
-
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
             {
                 return View();
             }
-            return RedirectToAction("Login", "Home");
+            return RedirectToAction("Login", "Auth");
         }
 
         [Authorize]
