@@ -17,7 +17,7 @@ namespace TechTime.Models
         public bool IsPaid { get; set; } = false;
         public string ContactName { get; set; } = string.Empty;
         public DateTime DateCreated { get; set; } = DateTime.Now;
-        public JobType JobType { get; set; } = JobType.TechTime;
+        public JobType JobType { get; set; } = JobType.Other;
         public Tech Tech { get; set; }
     }
 }

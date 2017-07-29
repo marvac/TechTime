@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TechTime.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using TechTime.Models;
+using TechTime.ViewModels;
+using TechTime.Models.Enum;
 
 namespace TechTime.Controllers
 {
@@ -42,18 +43,41 @@ namespace TechTime.Controllers
         [Authorize]
         public IActionResult History()
         {
-            return View();
+            var model = new List<HistoryViewModel>();
+            foreach (var jobEntry in _repo.GetJobEntries())
+            {
+                model.Add(new HistoryViewModel
+                {
+                    ContactName = jobEntry.ContactName,
+                    Customer = jobEntry.Customer,
+                    Hours = jobEntry.Hours,
+                    JobType = jobEntry.JobType,
+                    WorkDescription = jobEntry.WorkDescription,
+                    Id = jobEntry.Id
+                });
+            }
+
+            return View(model);
         }
 
         
         public IActionResult Create()
         {
-            return View();
+            var model = new JobEntryViewModel
+            {
+                CustomerList = _repo.GetCustomers().ToList(),
+                JobTypes = Enum.GetValues(typeof(JobType)).Cast<JobType>().ToList()
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(JobEntryViewModel viewModel)
         {
+            ViewBag.Error = null;
+            ViewBag.Success = null;
+
             var entry = _repo.GetJobEntries().FirstOrDefault(x => 
             x.Customer.CustomerId == viewModel.CustomerId &&
             x.WorkDescription == viewModel.WorkDescription &&
@@ -62,14 +86,14 @@ namespace TechTime.Controllers
 
             if (entry != null)
             {
-                ViewBag.Message = "Duplicate job entry already exists";
+                ViewBag.Error = "Duplicate job entry already exists";
             }
             else
             {
                 var customer = _repo.GetCustomers().FirstOrDefault(x => x.CustomerId == viewModel.CustomerId);
                 if (customer == null)
                 {
-                    ViewBag.Message = "Customer does not exist";
+                    ViewBag.Error = "Customer does not exist";
                 }
                 else
                 {
@@ -84,17 +108,17 @@ namespace TechTime.Controllers
 
                     if (await _repo.SaveChangesAsync())
                     {
-                        ViewBag.Message = "Job created successfully";
+                        ViewBag.Success = "Job created successfully";
                     }
                     else
                     {
-                        ViewBag.Message = "Could not add entry to the database";
+                        ViewBag.Error = "Could not add entry to the database";
                     }
                 }
                 
             }
-            
-            return View();
+
+            return Create();
         }
 
         public IActionResult Error()

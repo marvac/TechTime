@@ -4,6 +4,9 @@
 # Config file
 config.json
 
+# Database Migrations
+[Mm]igrations/
+
 # User-specific files
 *.suo
 *.user

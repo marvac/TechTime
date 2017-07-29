@@ -8,10 +8,13 @@ using TechTime.Models.Enum;
 
 namespace TechTime.ViewModels
 {
-    public class JobEntryViewModel
+    public class HistoryViewModel
     {
         [Required]
-        public string CustomerId { get; set; }
+        public int Id { get; set; } //corresponds to the entry ID in the database
+
+        [Required]
+        public Customer Customer { get; set; }
 
         [Required]
         [StringLength(1000, MinimumLength = 10)]
@@ -26,8 +29,6 @@ namespace TechTime.ViewModels
 
         public string ContactName { get; set; } = string.Empty;
 
-        public List<Customer> CustomerList { get; set; }
-        public List<JobType> JobTypes { get; set; }
 
     }
 }

@@ -31,6 +31,19 @@ namespace TechTime.Service
 
                 await _userManager.CreateAsync(userLogin, "demo");
             }
+
+            if (!_context.Customers.Any())
+            {
+                _context.Customers.AddRange(
+                    new Customer { CustomerId = "312", Name = "Edwin's Painting" },
+                    new Customer { CustomerId = "313", Name = "Down Under Clothing" },
+                    new Customer { CustomerId = "314", Name = "Henrik Clausen" },
+                    new Customer { CustomerId = "315", Name = "Pocahontas Foods USA" },
+                    new Customer { CustomerId = "316", Name = "Fowlers Grocery Store" },
+                    new Customer { CustomerId = "317", Name = "Douglas Tucker" });
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

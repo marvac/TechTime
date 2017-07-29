@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TechTime.Models;
-using TechTime.ViewModel.Api;
+using TechTime.ViewModels.Api;
 
 namespace TechTime.Controllers.Api
 {

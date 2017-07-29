@@ -1,5 +1,28 @@
-﻿@*
+﻿@using TechTime.ViewModels
+@model List<HistoryViewModel>
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Type</th>
+            <th>Hours</th>
+            <th>Desc.</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Model)
+        {
+            <tr>
+                <td>@entry.Customer.Name (@entry.Customer.CustomerId)</td>
+                <td>@entry.JobType</td>
+                <td>@entry.Hours</td>
+                <td>@entry.WorkDescription</td>
+            </tr>
+        }
+    </tbody>
+</table>

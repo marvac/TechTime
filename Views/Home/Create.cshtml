@@ -1,7 +1,7 @@
-﻿@using TechTime.ViewModel
-@model TechTime.ViewModel.JobEntryViewModel
+﻿@using TechTime.ViewModels
+@model JobEntryViewModel
 @{
-    ViewBag.Title = "Create Work Order";
+    ViewBag.Title = "Create Work Entry";
 }
 @section Styles{
 
@@ -19,15 +19,27 @@
 
     <form method="post" class="col-lg-4">
         <div asp-validation-summary="All"></div>
-        @if (ViewBag.Message != null)
+        @if (ViewBag.Success != null)
         {
-            <div class="alert alert-success">@ViewBag.Message</div>
+            <div class="alert alert-success">@ViewBag.Success</div>
+        }
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
         }
         <div class="form-group">
             <select class="form-control" asp-for="CustomerId">
-                @foreach (var item in CustomerListViewModel.GetCustomerList())
+                @foreach (var item in Model.CustomerList)
             {
                     <option value="@item.CustomerId">@item.Name (@item.CustomerId)</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <select class="form-control" asp-for="JobType">
+                @foreach (var item in Model.JobTypes)
+            {
+                    <option value="@item">@item.ToString()</option>
                 }
             </select>
         </div>
@@ -36,9 +48,13 @@
                 <input type="number" step="0.25" asp-for="Hours" class="form-control" />
             </div>
 
+        <div class="form-group">
+            <label>Contact Name</label>
+            <input type="text" asp-for="ContactName" class="form-control"  />
+        </div>
 
             <div class="form-group">
-                <label>WorkDescription</label>
+                <label>Work Description</label>
                 <textarea textarea asp-for="WorkDescription" class="form-control" rows="3"></textarea>
             </div>
 

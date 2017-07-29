@@ -7,7 +7,9 @@ namespace TechTime.Models.Enum
 {
     public enum JobType
     {
-        TechTime = 0,
-        Programming = 1
+        Support = 0,
+        Programming = 1,
+        Training = 2,
+        Other = 3
     }
 }
