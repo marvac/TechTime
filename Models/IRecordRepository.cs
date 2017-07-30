@@ -9,13 +9,17 @@ namespace TechTime.Models
     {
         Task<bool> SaveChangesAsync();
         Task AddUser(string userName, string password, string email);
-        void Add(Tech tech);
+
         void Add(Customer customer);
         void Add(JobEntry jobEntry);
+        void Add(JobType jobType);
+
+        void UpdateJobEntry(JobEntry jobEntry);
 
         IEnumerable<JobEntry> GetJobEntries();
         IEnumerable<Customer> GetCustomers();
-        IEnumerable<Tech> GetTechs();
+        IEnumerable<JobType> GetJobTypes();
 
+        JobType GetJobByDesc(string desc);
     }
 }

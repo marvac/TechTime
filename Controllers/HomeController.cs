@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using TechTime.Models;
 using TechTime.ViewModels;
-using TechTime.Models.Enum;
 
 namespace TechTime.Controllers
 {
@@ -53,6 +52,7 @@ namespace TechTime.Controllers
                     Hours = jobEntry.Hours,
                     JobType = jobEntry.JobType,
                     WorkDescription = jobEntry.WorkDescription,
+                    DateCreated = jobEntry.DateCreated,
                     Id = jobEntry.Id
                 });
             }
@@ -66,7 +66,7 @@ namespace TechTime.Controllers
             var model = new JobEntryViewModel
             {
                 CustomerList = _repo.GetCustomers().ToList(),
-                JobTypes = Enum.GetValues(typeof(JobType)).Cast<JobType>().ToList()
+                JobTypes = _repo.GetJobTypes().ToList()
             };
 
             return View(model);
@@ -81,8 +81,7 @@ namespace TechTime.Controllers
             var entry = _repo.GetJobEntries().FirstOrDefault(x => 
             x.Customer.CustomerId == viewModel.CustomerId &&
             x.WorkDescription == viewModel.WorkDescription &&
-            x.Hours == viewModel.Hours &&
-            x.JobType == viewModel.JobType);
+            x.Hours == viewModel.Hours);
 
             if (entry != null)
             {
@@ -103,7 +102,8 @@ namespace TechTime.Controllers
                         Customer = customer,
                         Hours = viewModel.Hours,
                         JobType = viewModel.JobType,
-                        WorkDescription = viewModel.WorkDescription
+                        WorkDescription = viewModel.WorkDescription,
+                        Tech = User.Identity.Name
                     });
 
                     if (await _repo.SaveChangesAsync())

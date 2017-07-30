@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,8 +20,7 @@ namespace TechTime.Models
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<JobEntry> JobEntries { get; set; }
-        public DbSet<Tech> Techs{ get; set; }
-
+        public DbSet<JobType> JobTypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

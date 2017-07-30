@@ -17,11 +17,6 @@ namespace TechTime.Models
             _userManager = userManager;
         }
 
-        public void Add(Tech tech)
-        {
-            _context.Techs.Add(tech);
-        }
-
         public void Add(Customer customer)
         {
             _context.Customers.Add(customer);
@@ -30,6 +25,11 @@ namespace TechTime.Models
         public void Add(JobEntry jobEntry)
         {
             _context.JobEntries.Add(jobEntry);
+        }
+
+        public void Add(JobType jobType)
+        {
+            _context.JobTypes.Add(jobType);
         }
 
         public async Task AddUser(string userName, string password, string email)
@@ -48,6 +48,16 @@ namespace TechTime.Models
             }
         }
 
+        public void UpdateJobEntry(JobEntry jobEntry)
+        {
+            int primaryKey = jobEntry.Id;
+            var entry = _context.JobEntries.FirstOrDefault(x => x.Id == primaryKey);
+            if (entry != null)
+            {
+                entry = jobEntry;
+            }
+        }
+
         public IEnumerable<Customer> GetCustomers()
         {
             return _context.Customers
@@ -61,11 +71,17 @@ namespace TechTime.Models
                 .ToList();
         }
 
-        public IEnumerable<Tech> GetTechs()
+        public IEnumerable<JobType> GetJobTypes()
         {
-            return _context.Techs
-                .ToList();
+            return _context.JobTypes.ToList();
         }
+
+        public JobType GetJobByDesc(string desc)
+        {
+            return _context.JobTypes.FirstOrDefault(x => x.Description.ToLower() == desc.ToLower());
+        }
+
+
 
         public async Task<bool> SaveChangesAsync()
         {

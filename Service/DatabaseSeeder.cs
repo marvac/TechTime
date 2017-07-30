@@ -24,7 +24,7 @@ namespace TechTime.Service
             {
                 UserLogin userLogin = new UserLogin
                 {
-                    UserName = "demo",
+                    UserName = "Demo",
                     Email = "demo@example.com",
                     Name = "Demo"
                 };
@@ -41,9 +41,19 @@ namespace TechTime.Service
                     new Customer { CustomerId = "315", Name = "Pocahontas Foods USA" },
                     new Customer { CustomerId = "316", Name = "Fowlers Grocery Store" },
                     new Customer { CustomerId = "317", Name = "Douglas Tucker" });
-
-                await _context.SaveChangesAsync();
             }
+
+            if (!_context.JobTypes.Any())
+            {
+                _context.JobTypes.AddRange(
+                    new JobType { Description = "Support", Rate = 150.00 },
+                    new JobType { Description = "Programming", Rate = 300.00 },
+                    new JobType { Description = "Training", Rate = 150.00 },
+                    new JobType { Description = "Other", Rate = 150.00 }
+                    );
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace TechTime.Models
 {
-    public class Tech
+    public class JobType
     {
         [Key]
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public string Description { get; set; }
+        public double Rate { get; set; }
     }
 }

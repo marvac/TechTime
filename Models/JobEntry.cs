@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using TechTime.Models.Enum;
 
 namespace TechTime.Models
 {
@@ -17,7 +13,15 @@ namespace TechTime.Models
         public bool IsPaid { get; set; } = false;
         public string ContactName { get; set; } = string.Empty;
         public DateTime DateCreated { get; set; } = DateTime.Now;
-        public JobType JobType { get; set; } = JobType.Other;
-        public Tech Tech { get; set; }
+        public string JobType { get; set; }
+
+        private string _tech;
+
+        public string Tech
+        {
+            get { return _tech; }
+            set { _tech = value?.ToLower() ?? string.Empty; }
+        }
+
     }
 }

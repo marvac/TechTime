@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using TechTime.Models;
-using TechTime.Models.Enum;
 
 namespace TechTime.ViewModels
 {
@@ -25,9 +21,10 @@ namespace TechTime.ViewModels
         public double Hours { get; set; }
 
         [Required]
-        public JobType JobType { get; set; }
+        public string JobType { get; set; }
 
         public string ContactName { get; set; } = string.Empty;
+        public DateTime DateCreated { get; set; }
 
 
     }

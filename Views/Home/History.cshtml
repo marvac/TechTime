@@ -1,28 +1,58 @@
 ﻿@using TechTime.ViewModels
 @model List<HistoryViewModel>
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
+    ViewBag.Title = "History";
 }
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Customer</th>
-            <th>Type</th>
-            <th>Hours</th>
-            <th>Desc.</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var entry in Model)
-        {
+@section Styles{
+    <link href="~/lib/datatables/media/css/dataTables.uikit.css" rel="stylesheet" />
+}
+@section Scripts{
+    <script src="~/lib/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/media/js/dataTables.jqueryui.min.js"></script>
+    <script src="~/lib/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.fn.editable.defaults.mode = 'popup';
+            $('.workDescription').editable();
+        });
+    </script>
+
+    <script type="text/javascript">
+        $('.dataTable').dataTable({
+            "order": [[0, 'desc'], [1, 'desc']],
+            "iDisplayLength": 25
+        });
+
+    </script>
+}
+
+    <table class="table table-hover table-responsive dataTable" id="printable">
+        <thead>
             <tr>
-                <td>@entry.Customer.Name (@entry.Customer.CustomerId)</td>
-                <td>@entry.JobType</td>
-                <td>@entry.Hours</td>
-                <td>@entry.WorkDescription</td>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Type</th>
+                <th>Hours</th>
+                <th>Desc.</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var entry in Model)
+            {
+                <tr>
+                    <td>@entry.DateCreated.ToString("yyyy/MM/dd")</td>
+                    <td>@entry.Customer.Name (@entry.Customer.CustomerId)</td>
+                    <td>@entry.JobType</td>
+                    <td>@entry.Hours</td>
+                    <td><a href="#" class="workDescription" data-name="workDescription" data-type="textarea" data-pk=@entry.Id data-url="../api/editdescription" data-title="Enter a work description">@entry.WorkDescription</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+
+        <a onclick="print('printable')">
+            <i class="fa fa-print"></i>
+        </a>

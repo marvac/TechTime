@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using TechTime.Models;
-using TechTime.Models.Enum;
 
 namespace TechTime.Migrations
 {
@@ -150,9 +149,9 @@ namespace TechTime.Migrations
 
                     b.Property<bool>("IsPaid");
 
-                    b.Property<int>("JobType");
+                    b.Property<string>("JobType");
 
-                    b.Property<int?>("TechId");
+                    b.Property<string>("Tech");
 
                     b.Property<string>("WorkDescription");
 
@@ -160,23 +159,18 @@ namespace TechTime.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("TechId");
-
                     b.ToTable("JobEntries");
                 });
 
-            modelBuilder.Entity("TechTime.Models.Tech", b =>
+            modelBuilder.Entity("TechTime.Models.JobType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Description");
 
-                    b.Property<string>("Email");
+                    b.Property<double>("Rate");
 
-                    b.Property<string>("Name");
+                    b.HasKey("Description");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Techs");
+                    b.ToTable("JobTypes");
                 });
 
             modelBuilder.Entity("TechTime.Models.UserLogin", b =>
@@ -277,10 +271,6 @@ namespace TechTime.Migrations
                     b.HasOne("TechTime.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId");
-
-                    b.HasOne("TechTime.Models.Tech", "Tech")
-                        .WithMany()
-                        .HasForeignKey("TechId");
                 });
         }
     }

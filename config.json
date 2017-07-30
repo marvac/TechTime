@@ -1,6 +1,6 @@
 ﻿{
   "ConnectionStrings": {
 
-	"RecordContextConnection": "Server=(localdb)\\MSSQLLocalDb;Database=TempTrackDb;Trusted_Connection=true;MultipleActiveResultSets=true;"
+	"RecordContextConnection": "Server=(localdb)\\MSSQLLocalDb;Database=TechTime;Trusted_Connection=true;MultipleActiveResultSets=true;"
   }
 }

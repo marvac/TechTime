@@ -48,5 +48,8 @@
       <Version>1.0.0-*</Version>
     </DotNetCliToolReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enum\" />
+  </ItemGroup>
 
 </Project>
