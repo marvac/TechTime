@@ -60,7 +60,8 @@ namespace TechTime.Controllers
             return View(model);
         }
 
-        
+        [HttpGet]
+        [Authorize]
         public IActionResult Create()
         {
             var model = new JobEntryViewModel
@@ -73,10 +74,10 @@ namespace TechTime.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(JobEntryViewModel viewModel)
         {
             ViewBag.Error = null;
-            ViewBag.Success = null;
 
             var entry = _repo.GetJobEntries().FirstOrDefault(x => 
             x.Customer.CustomerId == viewModel.CustomerId &&
@@ -92,33 +93,31 @@ namespace TechTime.Controllers
                 var customer = _repo.GetCustomers().FirstOrDefault(x => x.CustomerId == viewModel.CustomerId);
                 if (customer == null)
                 {
-                    ViewBag.Error = "Customer does not exist";
+                    ViewBag.Error = "Customer does not exist...";
                 }
                 else
                 {
-                    _repo.Add(new JobEntry
-                    {
-                        ContactName = viewModel.ContactName,
-                        Customer = customer,
-                        Hours = viewModel.Hours,
-                        JobType = viewModel.JobType,
-                        WorkDescription = viewModel.WorkDescription,
-                        Tech = User.Identity.Name
-                    });
+                    var jobEntry = AutoMapper.Mapper.Map<JobEntry>(viewModel);
+                    jobEntry.Tech = User.Identity.Name;
+                    jobEntry.Customer = customer;
 
-                    if (await _repo.SaveChangesAsync())
+                    _repo.Add(jobEntry);
+
+                    if (!await _repo.SaveChangesAsync())
                     {
-                        ViewBag.Success = "Job created successfully";
-                    }
-                    else
-                    {
-                        ViewBag.Error = "Could not add entry to the database";
+                        ViewBag.Error = "Could not add this entry to the database";
                     }
                 }
                 
             }
 
-            return Create();
+            if (ViewBag.Error != null)
+            {
+                return Create();
+            }
+
+            // TODO: Redirect to printable page
+            return RedirectToAction(nameof(Create));
         }
 
         public IActionResult Error()

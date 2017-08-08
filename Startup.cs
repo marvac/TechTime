@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using TechTime.Service;
+using AutoMapper;
+using TechTime.ViewModels;
 
 namespace TechTime
 {
@@ -75,9 +77,15 @@ namespace TechTime
 
             loggerFactory.AddDebug();
 
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<JobEntryViewModel, JobEntry>();
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -92,7 +100,9 @@ namespace TechTime
                     defaults: new { controller = "Home", action = "Index" });
             });
 
+
             databaseSeeder.Seed().Wait();
+
         }
     }
 }

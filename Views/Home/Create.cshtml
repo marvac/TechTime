@@ -7,22 +7,14 @@
 
 }
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-            $.fn.editable.defaults.mode = 'popup';
-            $('.customer').editable();
-        });
-    </script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
 
 <div class="row">
 
     <form method="post" class="col-lg-6 col-lg-offset-3">
-        <div asp-validation-summary="All"></div>
-        @if (ViewBag.Success != null)
-        {
-            <div class="alert alert-success">@ViewBag.Success</div>
-        }
+
         @if (ViewBag.Error != null)
         {
             <div class="alert alert-danger">@ViewBag.Error</div>
@@ -46,8 +38,11 @@
             </select>
         </div>
             <div class="form-group">
+                
                 <label asp-for="Hours">Hours</label>
+                <span class="text-danger" asp-validation-for="Hours"></span>
                 <input type="number" step="0.25" asp-for="Hours" class="form-control" />
+                
             </div>
 
         <div class="form-group">
@@ -56,8 +51,11 @@
         </div>
 
             <div class="form-group">
+                
                 <label>Work Description</label>
+                <span class="text-danger" asp-validation-for="WorkDescription"></span>
                 <textarea textarea asp-for="WorkDescription" class="form-control" rows="5"></textarea>
+                
             </div>
 
             <div>

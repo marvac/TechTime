@@ -10,7 +10,7 @@ namespace TechTime.ViewModels
         public string CustomerId { get; set; }
 
         [Required]
-        [StringLength(1000, MinimumLength = 10)]
+        [StringLength(1024, MinimumLength = 10, ErrorMessage = "Enter a description")]
         public string WorkDescription { get; set; }
 
         [Required]
