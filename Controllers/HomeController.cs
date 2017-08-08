@@ -28,12 +28,6 @@ namespace TechTime.Controllers
         }
 
         [Authorize]
-        public IActionResult About()
-        {
-            return View();
-        }
-
-        [Authorize]
         public IActionResult Contact()
         {
             return View();
@@ -103,21 +97,17 @@ namespace TechTime.Controllers
 
                     _repo.Add(jobEntry);
 
-                    if (!await _repo.SaveChangesAsync())
+                    if (await _repo.SaveChangesAsync())
                     {
-                        ViewBag.Error = "Could not add this entry to the database";
+                        return RedirectToAction("JobDetails", "Report", new { id = jobEntry.Id });
                     }
+
+                    ViewBag.Error = "Could not add this entry to the database";
+
                 }
-                
             }
 
-            if (ViewBag.Error != null)
-            {
-                return Create();
-            }
-
-            // TODO: Redirect to printable page
-            return RedirectToAction(nameof(Create));
+            return Create();
         }
 
         public IActionResult Error()

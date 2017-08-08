@@ -29,7 +29,7 @@ namespace TechTime.Service
                     Name = "Demo"
                 };
 
-                await _userManager.CreateAsync(userLogin, "demo");
+                await _userManager.CreateAsync(userLogin, "Demo");
             }
 
             if (!_context.Customers.Any())

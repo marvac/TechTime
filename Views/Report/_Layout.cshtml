@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/jquery.tablesorter/dist/css/theme.bootstrap_3.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    <link href="~/lib/jquery.tablesorter/dist/css/jquery.tablesorter.pager.min.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+    @RenderSection("styles", false)
+    <link href="~/css/site.css" rel="stylesheet" />
+
+
+    <title>TechTime - @ViewBag.Title</title>
+</head>
+<body>
+            <div class="container">
+                <h3>put a back and print button here</h3>
+                <div class="col-md-8 col-md-offset-2" id="printable">
+                    
+                    <h2 class="page-header">@ViewBag.Title</h2>
+                    @RenderBody()
+                    <h5 class="modal-footer">Date printed: @DateTime.Now.ToString("MMM dd, yyyy")</h5>
+                </div>
+            </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    @RenderSection("scripts", false)
+</body>
+</html>

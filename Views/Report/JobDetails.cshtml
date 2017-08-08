@@ -1,0 +1,27 @@
+﻿@using TechTime.Models
+@model JobEntry
+@{
+    ViewBag.Title = "Job Details";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-xs-6 text-left">
+        <p style="margin:0" class="text-muted">Tech</p>
+        <h3 style="margin-top:0">@Model.Tech</h3>
+    </div>
+
+    <div class="col-xs-6 text-right">
+        <p style="margin:0" class="text-muted">Work date</p>
+        <h3 style="margin-top:0">@Model.DateCreated.ToString("MMM dd, yyyy")</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-6 text-left">
+        <p style="margin:0" class="text-muted">Hours</p>
+        <h3 style="margin-top:0">@Model.Hours</h3>
+    </div>
+</div>
+
+<h2>@Model.ContactName</h2>
