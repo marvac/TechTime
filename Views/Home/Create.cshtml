@@ -20,7 +20,7 @@
             <div class="alert alert-danger">@ViewBag.Error</div>
         }
         <div class="form-group">
-            <label asp-for="CustomerId">Customer</label>
+            <label asp-for="CustomerId"></label>
             <select class="form-control" asp-for="CustomerId">
                 @foreach (var item in Model.CustomerList)
                 {
@@ -29,7 +29,7 @@
             </select>
         </div>
         <div class="form-group">
-            <label asp-for="JobType">Job Type</label>
+            <label asp-for="JobType"></label>
             <select class="form-control" asp-for="JobType">
                 @foreach (var item in Model.JobTypes)
                 {
@@ -37,30 +37,26 @@
                 }
             </select>
         </div>
-            <div class="form-group">
-                
-                <label asp-for="Hours">Hours</label>
-                <span class="text-danger" asp-validation-for="Hours"></span>
-                <input type="number" step="0.25" asp-for="Hours" class="form-control" />
-                
-            </div>
-
         <div class="form-group">
-            <label>Contact Name</label>
-            <input type="text" asp-for="ContactName" class="form-control"  />
+            <label asp-for="Hours"></label>
+            <span class="text-danger" asp-validation-for="Hours"></span>
+            <input type="number" step="0.25" asp-for="Hours" class="form-control" />
         </div>
 
-            <div class="form-group">
-                
-                <label>Work Description</label>
-                <span class="text-danger" asp-validation-for="WorkDescription"></span>
-                <textarea textarea asp-for="WorkDescription" class="form-control" rows="5"></textarea>
-                
-            </div>
+        <div class="form-group">
+            <label asp-for="ContactName"></label>
+            <input type="text" asp-for="ContactName" class="form-control" />
+        </div>
 
-            <div>
-                <input type="submit" value="Submit" class="btn btn-primary" />
-            </div>
+        <div class="form-group">
+            <label asp-for="WorkDescription"></label>
+            <span class="text-danger" asp-validation-for="WorkDescription"></span>
+            <textarea textarea asp-for="WorkDescription" class="form-control" rows="5"></textarea>
+        </div>
 
-</form>
+        <div>
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+
+    </form>
 </div>

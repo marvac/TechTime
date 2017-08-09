@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using TechTime.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using TechTime.Models;
 using TechTime.Service;
-using AutoMapper;
 using TechTime.ViewModels;
 
 namespace TechTime
@@ -81,6 +77,7 @@ namespace TechTime
             Mapper.Initialize(config =>
             {
                 config.CreateMap<JobEntryViewModel, JobEntry>();
+                config.CreateMap<JobEntry, HistoryViewModel>();
             });
 
             if (env.IsDevelopment())

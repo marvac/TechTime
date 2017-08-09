@@ -7,6 +7,24 @@ using System.Threading.Tasks;
 
 namespace TechTime.Models
 {
+    public interface IRecordRepository
+    {
+        Task<bool> SaveChangesAsync();
+        Task AddUser(string userName, string password, string email);
+
+        void Add(Customer customer);
+        void Add(JobEntry jobEntry);
+        void Add(JobType jobType);
+
+        void UpdateJobEntry(JobEntry jobEntry);
+
+        IEnumerable<JobEntry> GetJobEntries();
+        IEnumerable<Customer> GetCustomers();
+        IEnumerable<JobType> GetJobTypes();
+
+        JobType GetJobByDesc(string desc);
+    }
+
     public class RecordRepository : IRecordRepository
     {
         private RecordContext _context;
@@ -80,8 +98,6 @@ namespace TechTime.Models
         {
             return _context.JobTypes.FirstOrDefault(x => x.Description.ToLower() == desc.ToLower());
         }
-
-
 
         public async Task<bool> SaveChangesAsync()
         {

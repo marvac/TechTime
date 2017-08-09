@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace TechTime.Models
 {
@@ -15,7 +11,6 @@ namespace TechTime.Models
         public RecordContext(IConfigurationRoot config, DbContextOptions options) : base(options)
         {
             _config = config;
-
         }
 
         public DbSet<Customer> Customers { get; set; }
@@ -26,14 +21,11 @@ namespace TechTime.Models
         {
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseSqlServer(_config["ConnectionStrings:RecordContextConnection"]);
-
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
         }
     }
 }

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using TechTime.Models;
 using TechTime.ViewModels;
-using Microsoft.Extensions.Logging;
 
 namespace TechTime.Controllers
 {
@@ -42,16 +42,8 @@ namespace TechTime.Controllers
             var model = new List<HistoryViewModel>();
             foreach (var jobEntry in _repo.GetJobEntries())
             {
-                model.Add(new HistoryViewModel
-                {
-                    ContactName = jobEntry.ContactName,
-                    Customer = jobEntry.Customer,
-                    Hours = jobEntry.Hours,
-                    JobType = jobEntry.JobType,
-                    WorkDescription = jobEntry.WorkDescription,
-                    DateCreated = jobEntry.DateCreated,
-                    Id = jobEntry.Id
-                });
+                var entry = Mapper.Map<HistoryViewModel>(jobEntry);
+                model.Add(entry);
             }
 
             return View(model);
@@ -95,7 +87,7 @@ namespace TechTime.Controllers
                 }
                 else
                 {
-                    var jobEntry = AutoMapper.Mapper.Map<JobEntry>(viewModel);
+                    var jobEntry = Mapper.Map<JobEntry>(viewModel);
                     jobEntry.Tech = User.Identity.Name;
                     jobEntry.Customer = customer;
 
