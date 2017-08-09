@@ -4,14 +4,16 @@
     ViewBag.Title = "History";
 }
 @section Styles{
-    <link href="~/lib/datatables/media/css/dataTables.uikit.css" rel="stylesheet" />
-<link href="~/css/jasny-bootstrap.min.css" rel="stylesheet" />
+
+    <link href="~/css/dataTables.uikit.min.css" rel="stylesheet" />
+    <link href="~/css/jasny-bootstrap.min.css" rel="stylesheet" />
 }
 @section Scripts{
-    <script src="~/lib/datatables/media/js/jquery.dataTables.min.js"></script>
-    <script src="~/lib/datatables/media/js/dataTables.jqueryui.min.js"></script>
-    <script src="~/lib/datatables/media/js/dataTables.bootstrap.min.js"></script>
-<script src="~/js/jasny-bootstrap.min.js"></script>
+
+    <script src="~/js/dataTables.jqueryui.min.js"></script>
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/js/jasny-bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
             $.fn.editable.defaults.mode = 'popup';
@@ -53,8 +55,3 @@
     </table>
 
 
-
-
-        <a onclick="print('printable')">
-            <i class="fa fa-print"></i>
-        </a>
