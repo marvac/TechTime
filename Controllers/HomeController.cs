@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using TechTime.Models;
 using TechTime.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace TechTime.Controllers
 {
     public class HomeController : Controller
     {
         private IRecordRepository _repo;
+        private ILogger<HomeController> _logger;
 
-        public HomeController(IRecordRepository repo)
+        public HomeController(IRecordRepository repo, ILogger<HomeController> logger)
         {
             _repo = repo;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -88,6 +91,7 @@ namespace TechTime.Controllers
                 if (customer == null)
                 {
                     ViewBag.Error = "Customer does not exist...";
+                    _logger.LogError($"Tried to create job entry with invalid customer ID: {viewModel.CustomerId}");
                 }
                 else
                 {
@@ -103,6 +107,7 @@ namespace TechTime.Controllers
                     }
 
                     ViewBag.Error = "Could not add this entry to the database";
+                    _logger.LogError($"Error saving to database: {viewModel.CustomerId}");
 
                 }
             }

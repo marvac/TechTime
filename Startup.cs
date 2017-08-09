@@ -76,6 +76,7 @@ namespace TechTime
             app.UseIdentity();
 
             loggerFactory.AddDebug();
+            loggerFactory.AddFile("Logs/techtime_{Date}.txt");
 
             Mapper.Initialize(config =>
             {

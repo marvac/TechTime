@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,13 @@ namespace TechTime.Service
     {
         private RecordContext _context;
         private UserManager<UserLogin> _userManager;
+        private ILogger<DatabaseSeeder> _logger;
 
-        public DatabaseSeeder(RecordContext context, UserManager<UserLogin> userManager)
+        public DatabaseSeeder(RecordContext context, UserManager<UserLogin> userManager, ILogger<DatabaseSeeder> logger)
         {
             _context = context;
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task Seed()
@@ -53,7 +56,10 @@ namespace TechTime.Service
                     );
             }
 
-            await _context.SaveChangesAsync();
+            if (!(await _context.SaveChangesAsync() > 0))
+            {
+                _logger.LogError("Could not save seed data to database");
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace TechTime.Controllers
     public class ReportController : Controller
     {
         private IRecordRepository _repo;
+        private ILogger<ReportController> _logger;
 
-        public ReportController(IRecordRepository repo)
+        public ReportController(IRecordRepository repo, ILogger<ReportController> logger)
         {
             _repo = repo;
+            _logger = logger;
         }
 
         [Authorize]
@@ -26,7 +29,9 @@ namespace TechTime.Controllers
                 return View(model);
             }
 
+            _logger.LogError($"Failed to load job entry {id}");
             return BadRequest("Could not find requested job entry");
+
         }
     }
 }

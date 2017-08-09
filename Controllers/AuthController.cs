@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ namespace TechTime.Controllers
     {
         private readonly SignInManager<UserLogin> _signInManager;
         private readonly UserManager<UserLogin> _userManager;
+        private ILogger<AuthController> _logger;
 
-        public AuthController(SignInManager<UserLogin> signInManager, UserManager<UserLogin> userManager)
+        public AuthController(SignInManager<UserLogin> signInManager, UserManager<UserLogin> userManager, ILogger<AuthController> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _logger = logger;
         }
 
         public IActionResult Login()
@@ -46,6 +49,7 @@ namespace TechTime.Controllers
                 else
                 {
                     ModelState.AddModelError("", "Username or password incorrect");
+                    _logger.LogInformation($"Wrong username and password: {vm.Username} | {vm.Password}");
                 }
             }
 
