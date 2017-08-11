@@ -78,20 +78,18 @@ namespace TechTime.Models
 
         public IEnumerable<Customer> GetCustomers()
         {
-            return _context.Customers
-                .ToList();
+            return _context.Customers;
         }
 
         public IEnumerable<JobEntry> GetJobEntries()
         {
             return _context.JobEntries
-                .Include(x => x.Customer)
-                .ToList();
+                .Include(x => x.Customer);
         }
 
         public IEnumerable<JobType> GetJobTypes()
         {
-            return _context.JobTypes.ToList();
+            return _context.JobTypes;
         }
 
         public JobType GetJobByDesc(string desc)

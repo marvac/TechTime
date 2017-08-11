@@ -40,11 +40,11 @@ namespace TechTime.Controllers
         public IActionResult History()
         {
             var model = new List<HistoryViewModel>();
-            foreach (var jobEntry in _repo.GetJobEntries())
+
+            _repo.GetJobEntries().ToList().ForEach(entry =>
             {
-                var entry = Mapper.Map<HistoryViewModel>(jobEntry);
-                model.Add(entry);
-            }
+                model.Add(Mapper.Map<HistoryViewModel>(entry));
+            });
 
             return View(model);
         }
@@ -68,39 +68,42 @@ namespace TechTime.Controllers
         {
             ViewBag.Error = null;
 
-            var entry = _repo.GetJobEntries().FirstOrDefault(x => 
-            x.Customer.CustomerId == viewModel.CustomerId &&
-            x.WorkDescription == viewModel.WorkDescription &&
-            x.Hours == viewModel.Hours);
+            if (ModelState.IsValid)
+            {
+                var entry = _repo.GetJobEntries().FirstOrDefault(x =>
+                    x.Customer.CustomerId == viewModel.CustomerId &&
+                    x.WorkDescription == viewModel.WorkDescription &&
+                    x.Hours == viewModel.Hours);
 
-            if (entry != null)
-            {
-                ViewBag.Error = "Duplicate job entry already exists";
-            }
-            else
-            {
-                var customer = _repo.GetCustomers().FirstOrDefault(x => x.CustomerId == viewModel.CustomerId);
-                if (customer == null)
+                if (entry != null)
                 {
-                    ViewBag.Error = "Customer does not exist...";
-                    _logger.LogError($"Tried to create job entry with invalid customer ID: {viewModel.CustomerId}");
+                    ViewBag.Error = "Duplicate job entry already exists";
                 }
                 else
                 {
-                    var jobEntry = Mapper.Map<JobEntry>(viewModel);
-                    jobEntry.Tech = User.Identity.Name;
-                    jobEntry.Customer = customer;
-
-                    _repo.Add(jobEntry);
-
-                    if (await _repo.SaveChangesAsync())
+                    var customer = _repo.GetCustomers().FirstOrDefault(x => x.CustomerId == viewModel.CustomerId);
+                    if (customer == null)
                     {
-                        return RedirectToAction("JobDetails", "Report", new { id = jobEntry.Id });
+                        ViewBag.Error = "Customer does not exist...";
+                        _logger.LogError($"Tried to create job entry with invalid customer ID: {viewModel.CustomerId}");
                     }
+                    else
+                    {
+                        var jobEntry = Mapper.Map<JobEntry>(viewModel);
+                        jobEntry.Tech = User.Identity.Name;
+                        jobEntry.Customer = customer;
 
-                    ViewBag.Error = "Could not add this entry to the database";
-                    _logger.LogError($"Error saving to database: {viewModel.CustomerId}");
+                        _repo.Add(jobEntry);
 
+                        if (await _repo.SaveChangesAsync())
+                        {
+                            return RedirectToAction("JobDetails", "Report", new { id = jobEntry.Id });
+                        }
+
+                        ViewBag.Error = "Could not add this entry to the database";
+                        _logger.LogError($"Error saving to database: {viewModel.CustomerId}");
+
+                    }
                 }
             }
 
