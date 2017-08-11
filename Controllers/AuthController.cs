@@ -26,13 +26,13 @@ namespace TechTime.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Login(LoginViewModel vm, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel viewModel, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 var signInResult = await _signInManager.PasswordSignInAsync(
-                    vm.Username,
-                    vm.Password,
+                    viewModel.Username,
+                    viewModel.Password,
                     isPersistent: true,
                     lockoutOnFailure: false);
 
@@ -46,7 +46,45 @@ namespace TechTime.Controllers
                 else
                 {
                     ModelState.AddModelError("", "Username or password incorrect");
-                    _logger.LogInformation($"Wrong username and password: {vm.Username} | {vm.Password}");
+                }
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                UserLogin user = new UserLogin()
+                {
+                    UserName = viewModel.Username,
+                    Email = viewModel.Email,
+                    Name = viewModel.Username
+                };
+
+                var result = await _userManager.CreateAsync(user, viewModel.Password);
+
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent:true);
+
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        _logger.LogDebug(error.Description);
+                        ModelState.AddModelError("", error.Description);
+                    }
                 }
             }
 
@@ -56,8 +94,10 @@ namespace TechTime.Controllers
         public async Task<ActionResult> Logout()
         {
             if (User.Identity.IsAuthenticated)
+            {
                 await _signInManager.SignOutAsync();
-
+            }
+                
             return RedirectToAction("Login", "Auth");
         }
     }
