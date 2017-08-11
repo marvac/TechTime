@@ -10,15 +10,18 @@
 
     <link href="~/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="~/css/sb-admin-2.css" rel="stylesheet" />
+    @RenderSection("styles", false)
     <link href="~/css/site.css" rel="stylesheet" />
-
 
     <title>TechTime - @ViewBag.Title</title>
 </head>
 <body>
 
     @RenderBody()
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/jquery.validate.min.js"></script>
+    <script src="~/js/jquery.validate.unobtrusive.min.js"></script>
     @RenderSection("scripts", false)
 </body>
 </html>

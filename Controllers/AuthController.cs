@@ -25,7 +25,7 @@ namespace TechTime.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel viewModel, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -38,10 +38,10 @@ namespace TechTime.Controllers
 
                 if (signInResult.Succeeded)
                 {
-                    if (string.IsNullOrWhiteSpace(returnUrl))
+                    if (!Url.IsLocalUrl(returnUrl))
                         return RedirectToAction("Index", "Home");
-                    else
-                        return Redirect(returnUrl);
+
+                    return Redirect(returnUrl);
                 }
                 else
                 {

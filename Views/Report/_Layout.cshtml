@@ -19,15 +19,15 @@
     <title>TechTime - @ViewBag.Title</title>
 </head>
 <body>
-            <div class="container">
-                <h3>put a back and print button here</h3>
-                <div class="col-md-8 col-md-offset-2" id="printable">
-                    
-                    <h2 class="page-header">@ViewBag.Title</h2>
-                    @RenderBody()
-                    <h5 class="modal-footer">Date printed: @DateTime.Now.ToString("MMM dd, yyyy")</h5>
-                </div>
-            </div>
+    <div class="container">
+        <h3>put a back and print button here</h3>
+        <div class="col-md-8 col-md-offset-2" id="printable">
+
+            <h2 class="page-header">@ViewBag.Title</h2>
+            @RenderBody()
+            <h5 class="modal-footer">Date printed: @DateTime.Now.ToString("MMM dd, yyyy")</h5>
+        </div>
+    </div>
 
     <script src="~/js/jquery.min.js"></script>
     <script src="~/js/bootstrap.min.js"></script>
