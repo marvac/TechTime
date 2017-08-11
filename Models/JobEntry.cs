@@ -9,19 +9,20 @@ namespace TechTime.Models
         public int Id { get; set; }
         public double Hours { get; set; }
         public Customer Customer { get; set; }
-        public string WorkDescription { get; set; } = string.Empty;
-        public bool IsPaid { get; set; } = false;
+        public string WorkDescription { get; set; }
         public string ContactName { get; set; } = string.Empty;
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public string JobType { get; set; }
 
-        private string _tech;
+        public string OwnerId { get; set; }
+        public PaymentStatus Status { get; set; } = PaymentStatus.Unpaid;
+    }
 
-        public string Tech
-        {
-            get { return _tech; }
-            set { _tech = value?.ToLower() ?? string.Empty; }
-        }
-
+    public enum PaymentStatus : int
+    {
+        Unpaid = 0,
+        Paid = 1,
+        Cancelled = 2,
+        Partial = 3
     }
 }

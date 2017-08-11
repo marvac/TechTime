@@ -1,4 +1,9 @@
 ﻿@using TechTime.ViewModels
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using TechTime.Authorization
+
+@inject IAuthorizationService AuthorizationService 
 @model List<HistoryViewModel>
 @{
     ViewBag.Title = "History";
@@ -50,14 +55,18 @@
                 <td>@entry.Customer.Name (@entry.Customer.CustomerId)</td>
                 <td>@entry.JobType</td>
                 <td>@entry.Hours</td>
-                <td class="rowlink-skip">
-                    <a href="#" class="workDescription"
-                       data-name="workDescription"
-                       data-type="textarea"
-                       data-pk=@entry.Id
-                       data-url="../api/editdescription"
-                       data-title="Enter a new work description">@entry.WorkDescription</a>
-                </td>
+                @if (await AuthorizationService.AuthorizeAsync(User, entry, Constants.EditDesc))
+                {
+                    <td class="rowlink-skip">
+                        <a href="#" class="workDescription"
+                           data-name="workDescription"
+                           data-type="textarea"
+                           data-pk=@entry.Id
+                           data-url="../api/editdescription"
+                           data-title="Enter a new work description">@entry.WorkDescription</a>
+                    </td>
+
+                }
             </tr>
         }
     </tbody>

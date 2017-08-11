@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,17 +13,41 @@ namespace TechTime.Service
     {
         private RecordContext _context;
         private UserManager<UserLogin> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
         private ILogger<DatabaseSeeder> _logger;
 
-        public DatabaseSeeder(RecordContext context, UserManager<UserLogin> userManager, ILogger<DatabaseSeeder> logger)
+        public DatabaseSeeder(RecordContext context,
+            UserManager<UserLogin> userManager,
+            RoleManager<IdentityRole> roleManager,
+            ILogger<DatabaseSeeder> logger)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
             _logger = logger;
         }
 
         public async Task Seed()
         {
+
+            if (!(await _roleManager.RoleExistsAsync(Constants.StandardRole)))
+            {
+                var roleResult = await _roleManager.CreateAsync(new IdentityRole { Name = Constants.StandardRole });
+                if (!roleResult.Succeeded)
+                {
+                    _logger.LogError($"Could not add role: {Constants.StandardRole}");
+                }
+            }
+
+            if (!(await _roleManager.RoleExistsAsync(Constants.ManagerRole)))
+            {
+                var roleResult = await _roleManager.CreateAsync(new IdentityRole { Name = Constants.ManagerRole });
+                if (!roleResult.Succeeded)
+                {
+                    _logger.LogError($"Could not add role: {Constants.ManagerRole}");
+                }
+            }
+
             if (!_context.Users.Any())
             {
                 UserLogin userLogin = new UserLogin
@@ -32,7 +57,12 @@ namespace TechTime.Service
                     Name = "Demo"
                 };
 
-                await _userManager.CreateAsync(userLogin, "Demo");
+                var result = await _userManager.CreateAsync(userLogin, "demo");
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(userLogin, Constants.StandardRole);
+                    await _userManager.AddToRoleAsync(userLogin, Constants.ManagerRole);
+                }
             }
 
             if (!_context.Customers.Any())
@@ -52,8 +82,7 @@ namespace TechTime.Service
                     new JobType { Description = "Support", Rate = 150.00 },
                     new JobType { Description = "Programming", Rate = 300.00 },
                     new JobType { Description = "Training", Rate = 150.00 },
-                    new JobType { Description = "Other", Rate = 150.00 }
-                    );
+                    new JobType { Description = "Other", Rate = 150.00 });
             }
 
             if (!(await _context.SaveChangesAsync() > 0))

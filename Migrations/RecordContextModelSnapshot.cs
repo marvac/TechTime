@@ -13,13 +13,12 @@ namespace TechTime.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.2")
+                .HasAnnotation("ProductVersion", "1.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Id");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -33,7 +32,6 @@ namespace TechTime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
-                        .IsUnique()
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
@@ -105,6 +103,8 @@ namespace TechTime.Migrations
 
                     b.HasIndex("RoleId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("AspNetUserRoles");
                 });
 
@@ -147,11 +147,11 @@ namespace TechTime.Migrations
 
                     b.Property<double>("Hours");
 
-                    b.Property<bool>("IsPaid");
-
                     b.Property<string>("JobType");
 
-                    b.Property<string>("Tech");
+                    b.Property<string>("OwnerId");
+
+                    b.Property<int>("Status");
 
                     b.Property<string>("WorkDescription");
 
@@ -164,8 +164,7 @@ namespace TechTime.Migrations
 
             modelBuilder.Entity("TechTime.Models.JobType", b =>
                 {
-                    b.Property<string>("Description")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Description");
 
                     b.Property<double>("Rate");
 
@@ -176,8 +175,7 @@ namespace TechTime.Migrations
 
             modelBuilder.Entity("TechTime.Models.UserLogin", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Id");
 
                     b.Property<int>("AccessFailedCount");
 
@@ -190,8 +188,6 @@ namespace TechTime.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<int>("Level");
 
                     b.Property<bool>("LockoutEnabled");
 

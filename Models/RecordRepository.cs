@@ -10,7 +10,6 @@ namespace TechTime.Models
     public interface IRecordRepository
     {
         Task<bool> SaveChangesAsync();
-        Task AddUser(string userName, string password, string email);
 
         void Add(Customer customer);
         void Add(JobEntry jobEntry);
@@ -48,22 +47,6 @@ namespace TechTime.Models
         public void Add(JobType jobType)
         {
             _context.JobTypes.Add(jobType);
-        }
-
-        public async Task AddUser(string userName, string password, string email)
-        {
-            if (await _userManager.FindByEmailAsync(email) == null)
-            {
-                var user = new UserLogin()
-                {
-                    UserName = userName,
-                    Email = email,
-                    Level = UserLevel.Regular,
-                    DateCreated = DateTime.Now
-                };
-
-                await _userManager.CreateAsync(user, password);
-            }
         }
 
         public void UpdateJobEntry(JobEntry jobEntry)

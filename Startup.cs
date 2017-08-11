@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,6 +13,7 @@ using Newtonsoft.Json.Serialization;
 using TechTime.Models;
 using TechTime.Service;
 using TechTime.ViewModels;
+using TechTime.Authorization;
 
 namespace TechTime
 {
@@ -56,13 +60,23 @@ namespace TechTime
 
             services.AddMvc(config =>
             {
-
+                if (_env.IsDevelopment())
+                {
+                    //config.Filters.Add(new RequireHttpsAttribute());
+                }
+                var policy = new AuthorizationPolicyBuilder()
+                     .RequireAuthenticatedUser()
+                     .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
 
             }).AddJsonOptions(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Error;
                 opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
+
+            services.AddScoped<IAuthorizationHandler,OwnerAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler,ManagerAuthorizationHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DatabaseSeeder databaseSeeder)

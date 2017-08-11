@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -20,12 +21,14 @@ namespace TechTime.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost, ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<ActionResult> Login(LoginViewModel viewModel, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -53,12 +56,14 @@ namespace TechTime.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost, ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -74,6 +79,7 @@ namespace TechTime.Controllers
 
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, Constants.StandardRole);
                     await _signInManager.SignInAsync(user, isPersistent:true);
 
                     return RedirectToAction("Index", "Home");
@@ -91,6 +97,7 @@ namespace TechTime.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public async Task<ActionResult> Logout()
         {
             if (User.Identity.IsAuthenticated)

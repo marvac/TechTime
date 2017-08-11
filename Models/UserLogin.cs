@@ -8,13 +8,6 @@ namespace TechTime.Models
     {
         [Required]
         public string Name { get; set; }
-        public UserLevel Level { get; set; } = UserLevel.Regular;
         public DateTime DateCreated { get; set; } = DateTime.Now;
-    }
-
-    public enum UserLevel
-    {
-        Regular = 0,
-        Administrator = 1
     }
 }

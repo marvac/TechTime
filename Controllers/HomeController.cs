@@ -14,13 +14,16 @@ namespace TechTime.Controllers
     {
         private IRecordRepository _repo;
         private ILogger<HomeController> _logger;
+        private IAuthorizationService _authService;
 
-        public HomeController(IRecordRepository repo, ILogger<HomeController> logger)
+        public HomeController(IRecordRepository repo, ILogger<HomeController> logger, IAuthorizationService authService)
         {
             _repo = repo;
             _logger = logger;
+            _authService = authService;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
@@ -90,7 +93,7 @@ namespace TechTime.Controllers
                     else
                     {
                         var jobEntry = Mapper.Map<JobEntry>(viewModel);
-                        jobEntry.Tech = User.Identity.Name;
+                        jobEntry.OwnerId = User.Identity.Name;
                         jobEntry.Customer = customer;
 
                         _repo.Add(jobEntry);
@@ -110,6 +113,7 @@ namespace TechTime.Controllers
             return Create();
         }
 
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View();

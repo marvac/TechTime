@@ -23,6 +23,8 @@ namespace TechTime.ViewModels
         [Required]
         public string JobType { get; set; }
 
+        public string OwnerId { get; set; }
+
         public string ContactName { get; set; } = string.Empty;
         public DateTime DateCreated { get; set; }
 
