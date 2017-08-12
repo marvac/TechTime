@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Identity
 @using TechTime.Authorization
 
-@inject IAuthorizationService AuthorizationService 
+@inject IAuthorizationService AuthorizationService
 @model List<HistoryViewModel>
 @{
     ViewBag.Title = "History";
@@ -45,18 +45,17 @@
     </thead>
     <tbody data-link="row" class="rowlink">
         @foreach (var entry in Model)
-            {
-            <tr>
-                <td>
-                    <a asp-controller="Report"
-                       asp-action="JobDetails"
-                       asp-route-id=@entry.Id></a>@entry.DateCreated.ToString("yyyy/MM/dd")
-                </td>
-                <td>@entry.Customer.Name (@entry.Customer.CustomerId)</td>
-                <td>@entry.JobType</td>
-                <td>@entry.Hours</td>
-                @if (await AuthorizationService.AuthorizeAsync(User, entry, Constants.EditDesc))
-                {
+         {
+
+                <tr>
+                    <td>
+                        <a asp-controller="Report"
+                           asp-action="JobDetails"
+                           asp-route-id=@entry.Id></a>@entry.DateCreated.ToString("yyyy/MM/dd")
+                    </td>
+                    <td>@entry.Customer.Name (@entry.Customer.CustomerId)</td>
+                    <td>@entry.JobType</td>
+                    <td>@entry.Hours</td>
                     <td class="rowlink-skip">
                         <a href="#" class="workDescription"
                            data-name="workDescription"
@@ -65,9 +64,8 @@
                            data-url="../api/editdescription"
                            data-title="Enter a new work description">@entry.WorkDescription</a>
                     </td>
-
-                }
-            </tr>
+                </tr>
+            
         }
     </tbody>
 </table>

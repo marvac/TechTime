@@ -64,10 +64,7 @@ namespace TechTime
                 {
                     //config.Filters.Add(new RequireHttpsAttribute());
                 }
-                var policy = new AuthorizationPolicyBuilder()
-                     .RequireAuthenticatedUser()
-                     .Build();
-                config.Filters.Add(new AuthorizeFilter(policy));
+
 
             }).AddJsonOptions(opt =>
             {

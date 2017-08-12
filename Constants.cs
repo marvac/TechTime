@@ -13,8 +13,10 @@ namespace TechTime
 
         public static string EditStatusOperation => "EditStatus";
         public static string EditDescOperation => "EditDescription";
+        public static string ViewOperation => "ViewOperation";
 
         public static OperationAuthorizationRequirement EditStatus = new OperationAuthorizationRequirement { Name = Constants.EditStatusOperation };
         public static OperationAuthorizationRequirement EditDesc = new OperationAuthorizationRequirement { Name = Constants.EditDescOperation };
+        public static OperationAuthorizationRequirement View = new OperationAuthorizationRequirement { Name = Constants.ViewOperation };
     }
 }

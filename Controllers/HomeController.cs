@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -15,12 +16,14 @@ namespace TechTime.Controllers
         private IRecordRepository _repo;
         private ILogger<HomeController> _logger;
         private IAuthorizationService _authService;
+        private UserManager<UserLogin> _userManager;
 
-        public HomeController(IRecordRepository repo, ILogger<HomeController> logger, IAuthorizationService authService)
+        public HomeController(IRecordRepository repo, ILogger<HomeController> logger, IAuthorizationService authService, UserManager<UserLogin> userManager)
         {
             _repo = repo;
             _logger = logger;
             _authService = authService;
+            _userManager = userManager;
         }
 
         [AllowAnonymous]
@@ -40,14 +43,17 @@ namespace TechTime.Controllers
         }
 
         [Authorize]
-        public IActionResult History()
+        public async Task<IActionResult> History()
         {
             var model = new List<HistoryViewModel>();
 
-            _repo.GetJobEntries().ToList().ForEach(entry =>
+            foreach (var entry in _repo.GetJobEntries())
             {
-                model.Add(Mapper.Map<HistoryViewModel>(entry));
-            });
+                if (await _authService.AuthorizeAsync(User, entry, Constants.View))
+                {
+                    model.Add(Mapper.Map<HistoryViewModel>(entry));
+                }
+            }
 
             return View(model);
         }
@@ -93,7 +99,7 @@ namespace TechTime.Controllers
                     else
                     {
                         var jobEntry = Mapper.Map<JobEntry>(viewModel);
-                        jobEntry.OwnerId = User.Identity.Name;
+                        jobEntry.OwnerId = _userManager.GetUserId(User);
                         jobEntry.Customer = customer;
 
                         _repo.Add(jobEntry);

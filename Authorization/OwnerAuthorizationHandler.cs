@@ -24,10 +24,7 @@ namespace TechTime.Authorization
                 return Task.FromResult(0);
             }
 
-            if (requirement.Name != Constants.EditDescOperation)
-            {
-                return Task.FromResult(0);
-            }
+            //Don't allow user to set payment status
 
             if (resource.OwnerId == _userManager.GetUserId(context.User))
             {
