@@ -8,13 +8,13 @@ using TechTime.ViewModels;
 
 namespace TechTime.Controllers
 {
-    public class AuthController : Controller
+    public class AccountController : Controller
     {
         private readonly SignInManager<UserLogin> _signInManager;
         private readonly UserManager<UserLogin> _userManager;
-        private ILogger<AuthController> _logger;
+        private ILogger<AccountController> _logger;
 
-        public AuthController(SignInManager<UserLogin> signInManager, UserManager<UserLogin> userManager, ILogger<AuthController> logger)
+        public AccountController(SignInManager<UserLogin> signInManager, UserManager<UserLogin> userManager, ILogger<AccountController> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -105,7 +105,7 @@ namespace TechTime.Controllers
                 await _signInManager.SignOutAsync();
             }
                 
-            return RedirectToAction("Login", "Auth");
+            return RedirectToAction("Login", "Account");
         }
     }
 }

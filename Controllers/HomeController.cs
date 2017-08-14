@@ -33,7 +33,7 @@ namespace TechTime.Controllers
             {
                 return View();
             }
-            return RedirectToAction("Login", "Auth");
+            return RedirectToAction("Login", "Account");
         }
 
         [Authorize]
@@ -49,7 +49,8 @@ namespace TechTime.Controllers
 
             foreach (var entry in _repo.GetJobEntries())
             {
-                if (await _authService.AuthorizeAsync(User, entry, Constants.View))
+                var authResult = await _authService.AuthorizeAsync(User, entry, Constants.View);
+                if (authResult.Succeeded)
                 {
                     model.Add(Mapper.Map<HistoryViewModel>(entry));
                 }

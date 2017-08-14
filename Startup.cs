@@ -1,19 +1,17 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TechTime.Authorization;
 using TechTime.Models;
 using TechTime.Service;
 using TechTime.ViewModels;
-using TechTime.Authorization;
 
 namespace TechTime
 {
@@ -49,7 +47,6 @@ namespace TechTime
                 config.Password.RequireUppercase = false;
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireLowercase = false;
-                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
             }).AddEntityFrameworkStores<RecordContext>();
 
             services.AddRouting(options =>
@@ -80,7 +77,7 @@ namespace TechTime
         {
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseIdentity();
+            app.UseAuthentication();
 
             loggerFactory.AddDebug();
             loggerFactory.AddFile("Logs/techtime_{Date}.txt");

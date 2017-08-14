@@ -76,7 +76,7 @@ namespace TechTime.Controllers.Api
                     jobEntry.OwnerId = _userManager.GetUserId(User);
 
                     var isAuthorized = await _authService.AuthorizeAsync(User, jobEntry, Constants.EditStatus);
-                    if (!isAuthorized)
+                    if (!isAuthorized.Succeeded)
                     {
                         return new ChallengeResult();
                     }
