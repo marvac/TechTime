@@ -13,7 +13,7 @@ namespace TechTime.ViewModels
         [Required]
         [Display(Name = "Description")]
         [StringLength(2048, MinimumLength = 10, ErrorMessage = "Enter a longer description (2048 character max)")]
-        public string WorkDescription { get; set; }
+        public string Description { get; set; }
 
         [Required]
         [Display(Name = "Hours Worked")]
@@ -22,7 +22,7 @@ namespace TechTime.ViewModels
 
         [Required]
         [Display(Name = "Job Type")]
-        public string JobType { get; set; }
+        public string Type { get; set; }
 
         [Display(Name = "Contact Name")]
         public string ContactName { get; set; } = string.Empty;

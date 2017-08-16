@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -77,7 +77,8 @@ namespace TechTime
         {
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseAuthentication();
+            app.UseIdentity();
+            
 
             loggerFactory.AddDebug();
             loggerFactory.AddFile("Logs/techtime_{Date}.txt");
@@ -90,12 +91,13 @@ namespace TechTime
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                //app.UseDeveloperExceptionPage();
+                //app.UseDatabaseErrorPage();
+                app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseStatusCodePagesWithReExecute("/StatusCode/{0}");
             }
 
             app.UseMvc(config =>

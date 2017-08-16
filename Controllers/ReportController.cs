@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Threading.Tasks;
 using TechTime.Models;
 
 namespace TechTime.Controllers
@@ -10,24 +12,36 @@ namespace TechTime.Controllers
     {
         private IRecordRepository _repo;
         private ILogger<ReportController> _logger;
+        private IAuthorizationService _authService;
+        private UserManager<UserLogin> _userManager;
 
-        public ReportController(IRecordRepository repo, ILogger<ReportController> logger)
+        public ReportController(IRecordRepository repo, 
+            ILogger<ReportController> logger, 
+            IAuthorizationService authService, 
+            UserManager<UserLogin> userManager)
         {
             _repo = repo;
             _logger = logger;
+            _authService = authService;
+            _userManager = userManager;
         }
 
         [Authorize]
-        public IActionResult JobDetails(int id)
+        public async Task<IActionResult> JobDetails(int id)
         {
             var model = _repo.GetJobEntries().FirstOrDefault(x => x.Id == id);
             if (model != null)
             {
-                return View(model);
+                var authResult = await _authService.AuthorizeAsync(User, model, Constants.View);
+                if (authResult)
+                {
+                    return View(model);
+                }
+
+                return Unauthorized();
             }
 
-            _logger.LogError($"Failed to load job entry {id}");
-            return BadRequest("Could not find requested job entry");
+            return NotFound();
 
         }
     }

@@ -9,10 +9,10 @@ namespace TechTime.Models
         public int Id { get; set; }
         public double Hours { get; set; }
         public Customer Customer { get; set; }
-        public string WorkDescription { get; set; }
-        public string ContactName { get; set; } = string.Empty;
+        public string Description { get; set; }
+        public string Contact { get; set; } = string.Empty;
         public DateTime DateCreated { get; set; } = DateTime.Now;
-        public string JobType { get; set; }
+        public string Type { get; set; }
 
         public string OwnerId { get; set; }
         public PaymentStatus Status { get; set; } = PaymentStatus.Unpaid;

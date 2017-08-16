@@ -1,6 +1,89 @@
-﻿@{
-    ViewBag.Title = $"Summary for {DateTime.Now.ToString("MMMM")}";
+﻿@model DashboardViewModel
+@{
+    ViewBag.Title = $"Dashboard";
 }
 @section Styles{
 
 }
+@section Scripts{
+    <script src="~/js/chart.bundle.min.js"></script>
+    <script src="~/js/barchart.js"></script>
+
+<script>
+
+
+    var barChartData = {
+        labels: @Html.Raw(Json.Serialize(Model.BarChart.Labels)),
+        datasets: @Html.Raw(Json.Serialize(Model.BarChart.DataSets))};
+
+        window.onload = function () {
+            var ctx = document.getElementById("canvas").getContext("2d");
+            window.myBar = new Chart(ctx, {
+                type: 'bar',
+                data: barChartData,
+                options: {
+                    title: {
+                        display: false,
+                        text: ""
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            stacked: true,
+                        }],
+                        yAxes: [{
+                            stacked: true
+                        }]
+                    }
+                }
+            });
+        };
+
+        document.getElementById('randomizeData').addEventListener('click', function () {
+            barChartData.datasets.forEach(function (dataset, i) {
+                dataset.data = dataset.data.map(function () {
+                    return randomScalingFactor();
+                });
+            });
+            window.myBar.update();
+        });
+</script>
+
+}
+
+<div class="col-md-6">
+
+</div>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Hours Billed
+
+            </div>
+
+            <div class="panel-body">
+                <canvas id="canvas"></canvas>
+                
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Short History
+
+            </div>
+            <div class="panel-body">
+                <canvas width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -43,7 +43,7 @@ namespace TechTime.Controllers.Api
                         return BadRequest("Could not find job entry");
                     }
 
-                    jobEntry.WorkDescription = viewModel.Value;
+                    jobEntry.Description = viewModel.Value;
 
                     _repo.UpdateJobEntry(jobEntry);
 
@@ -76,7 +76,7 @@ namespace TechTime.Controllers.Api
                     jobEntry.OwnerId = _userManager.GetUserId(User);
 
                     var isAuthorized = await _authService.AuthorizeAsync(User, jobEntry, Constants.EditStatus);
-                    if (!isAuthorized.Succeeded)
+                    if (!isAuthorized)
                     {
                         return new ChallengeResult();
                     }

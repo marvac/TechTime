@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,10 @@ namespace TechTime.Controllers
         private IAuthorizationService _authService;
         private UserManager<UserLogin> _userManager;
 
-        public HomeController(IRecordRepository repo, ILogger<HomeController> logger, IAuthorizationService authService, UserManager<UserLogin> userManager)
+        public HomeController(IRecordRepository repo, 
+            ILogger<HomeController> logger, 
+            IAuthorizationService authService, 
+            UserManager<UserLogin> userManager)
         {
             _repo = repo;
             _logger = logger;
@@ -31,7 +35,35 @@ namespace TechTime.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return View();
+                var startDate = DateTime.Now.AddMonths(-6);
+                var data = _repo.GetJobEntries().Where(x => x.DateCreated >= startDate);
+
+                DashboardViewModel viewModel = new DashboardViewModel();
+
+                viewModel.BarChart.Labels = Enumerable.Range(0, 6)
+                    .Select(x => DateTime.Now.AddMonths(x - 5))
+                    .Select(date => date.ToString("MMM")).ToArray();
+
+
+                foreach (var jobType in data.GroupBy(x => x.Type))
+                {
+                    /* I promise I will fix this garbage after I get some sleep */
+                    double hours1 = data.Where(x => x.DateCreated.Month == DateTime.Now.AddMonths(-5).Month && x.Type == jobType.Key).Select(x => x.Hours).Sum();
+                    double hours2 = data.Where(x => x.DateCreated.Month == DateTime.Now.AddMonths(-4).Month && x.Type == jobType.Key).Select(x => x.Hours).Sum();
+                    double hours3 = data.Where(x => x.DateCreated.Month == DateTime.Now.AddMonths(-3).Month && x.Type == jobType.Key).Select(x => x.Hours).Sum();
+                    double hours4 = data.Where(x => x.DateCreated.Month == DateTime.Now.AddMonths(-2).Month && x.Type == jobType.Key).Select(x => x.Hours).Sum();
+                    double hours5 = data.Where(x => x.DateCreated.Month == DateTime.Now.AddMonths(-1).Month && x.Type == jobType.Key).Select(x => x.Hours).Sum();
+                    double hours6 = data.Where(x => x.DateCreated.Month == DateTime.Now.AddMonths(-0).Month && x.Type == jobType.Key).Select(x => x.Hours).Sum();
+
+                    viewModel.BarChart.DataSets.Add(new BarChartViewModel.Bar
+                    {
+                        Label = jobType.Key,
+                        BackgroundColor = $"rgb({_repo.GetJobByDesc(jobType.Key).ColorCode})",
+                        Data = new double[] { hours1, hours2, hours3, hours4, hours5, hours6 }
+                    });
+                }
+
+                return View(viewModel);
             }
             return RedirectToAction("Login", "Account");
         }
@@ -50,7 +82,7 @@ namespace TechTime.Controllers
             foreach (var entry in _repo.GetJobEntries())
             {
                 var authResult = await _authService.AuthorizeAsync(User, entry, Constants.View);
-                if (authResult.Succeeded)
+                if (authResult)
                 {
                     model.Add(Mapper.Map<HistoryViewModel>(entry));
                 }
@@ -82,7 +114,7 @@ namespace TechTime.Controllers
             {
                 var entry = _repo.GetJobEntries().FirstOrDefault(x =>
                     x.Customer.CustomerId == viewModel.CustomerId &&
-                    x.WorkDescription == viewModel.WorkDescription &&
+                    x.Description == viewModel.Description &&
                     x.Hours == viewModel.Hours);
 
                 if (entry != null)
@@ -99,19 +131,27 @@ namespace TechTime.Controllers
                     }
                     else
                     {
-                        var jobEntry = Mapper.Map<JobEntry>(viewModel);
-                        jobEntry.OwnerId = _userManager.GetUserId(User);
-                        jobEntry.Customer = customer;
-
-                        _repo.Add(jobEntry);
-
-                        if (await _repo.SaveChangesAsync())
+                        try
                         {
-                            return RedirectToAction("JobDetails", "Report", new { id = jobEntry.Id });
-                        }
+                            var jobEntry = Mapper.Map<JobEntry>(viewModel);
+                            //jobEntry.Type = _repo.GetJobTypes().FirstOrDefault(x => x.Description == viewModel.Description);
+                            jobEntry.OwnerId = _userManager.GetUserId(User);
+                            jobEntry.Customer = customer;
 
-                        ViewBag.Error = "Could not add this entry to the database";
-                        _logger.LogError($"Error saving to database: {viewModel.CustomerId}");
+                            _repo.Add(jobEntry);
+
+                            if (await _repo.SaveChangesAsync())
+                            {
+                                return RedirectToAction("JobDetails", "Report", new { id = jobEntry.Id });
+                            }
+
+                            ViewBag.Error = "Could not add this entry to the database";
+                            _logger.LogError($"Error saving to database: {viewModel.CustomerId}");
+                        }
+                        catch(Exception ex)
+                        {
+                            _logger.LogError(ex.Message);
+                        }
 
                     }
                 }

@@ -79,11 +79,13 @@ namespace TechTime.Service
             if (!_context.JobTypes.Any())
             {
                 _context.JobTypes.AddRange(
-                    new JobType { Description = "Support", Rate = 150.00 },
-                    new JobType { Description = "Programming", Rate = 300.00 },
-                    new JobType { Description = "Training", Rate = 150.00 },
-                    new JobType { Description = "Other", Rate = 150.00 });
+                    new JobType { Description = "Support", DefaultRate = 150.00, ColorCode = "255, 99, 132" },
+                    new JobType { Description = "Programming", DefaultRate = 300.00, ColorCode = "255, 159, 64" },
+                    new JobType { Description = "Training", DefaultRate = 150.00, ColorCode = "75, 192, 192" },
+                    new JobType { Description = "Other", DefaultRate = 150.00, ColorCode = "54, 162, 235" });
             }
+
+
 
             if (!(await _context.SaveChangesAsync() > 0))
             {
